@@ -1,0 +1,14 @@
+# Ambiente Virtual
+venv/
+env/
+
+# Variáveis de Ambiente
+.env
+
+# Arquivos compilados do Python
+__pycache__/
+*.pyc
+
+# Banco de dados SQLite local (opcional, dependendo se a vaga pede o banco populado, mas é boa prática ignorar arquivos dinâmicos)
+*.db
+*.sqlite3

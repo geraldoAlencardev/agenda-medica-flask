@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Agenda Médica</title>
+    <link href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        .header-controls { margin-bottom: 20px; }
+        #busca { padding: 10px; width: 350px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <h2>Agenda Médica - Consultas</h2>
+
+    <div class="header-controls">
+        <input type="text" id="busca" placeholder="Buscar por Paciente, CPF ou Médico...">
+    </div>
+
+    {% if mensagem_erro %}
+        <div style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
+            {{ mensagem_erro }}
+        </div>
+    {% endif %}
+
+    <div id="tabela-agendamentos"></div>
+
+    <script>
+        // Recebendo os dados passados pelo Backend via Jinja2 de forma segura
+        var dadosAgendamentos = {{ agendamentos | tojson }};
+
+        // Inicialização e Configuração do Tabulator
+        var table = new Tabulator("#tabela-agendamentos", {
+            data: dadosAgendamentos, // Define os dados vindos do backend
+            layout: "fitColumns", // Ajusta as colunas automaticamente ao tamanho da tela
+            placeholder: "Nenhum agendamento encontrado", // Mensagem de tabela vazia
+            columns: [
+                {title:"Data", field:"data", sorter:"date"},
+                {title:"Horário", field:"horario"},
+                {title:"Paciente", field:"paciente"},
+                {title:"CPF", field:"CPF"},
+                {title:"Médico", field:"medico"},
+                {title:"Especialidade", field:"especialidade"},
+                {title:"Convênio", field:"convenio"},
+                {title:"Status", field:"status"}
+            ],
+        });
+
+        // Lógica de Busca/Filtro em Tempo Real
+        document.getElementById("busca").addEventListener("keyup", function(){
+            var valorBusca = this.value.toLowerCase();
+
+            // Filtro customizado com a API nativa para buscar em múltiplas colunas simultaneamente
+            table.setFilter(function(data){
+                return String(data.paciente).toLowerCase().includes(valorBusca) ||
+                       String(data.CPF).toLowerCase().includes(valorBusca) ||
+                       String(data.medico).toLowerCase().includes(valorBusca);
+            });
+        });
+    </script>
+</body>
+</html>
