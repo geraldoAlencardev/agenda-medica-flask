@@ -1,5 +1,5 @@
-import sqlite3
 import os
+import sqlite3
 from werkzeug.security import generate_password_hash
 
 # Define o caminho onde o arquivo do banco de dados será salvo
@@ -7,6 +7,7 @@ from werkzeug.security import generate_password_hash
 DB_PATH = os.path.join('database', 'agenda.db')
 
 def criar_banco_de_dados():
+    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
     # Conecta ao banco (se o arquivo agenda.db não existir, ele será criado automaticamente)
     conexao = sqlite3.connect(DB_PATH)
     cursor = conexao.cursor()

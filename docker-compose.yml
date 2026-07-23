@@ -1,14 +1,14 @@
-version: '3.8'
-
 services:
   web:
     build: .
     container_name: agenda_medica_app
     ports:
       - "5000:5000"
-    # O comando abaixo instrui o Docker a carregar o nosso arquivo .env
-    env_file:
-      - .env
-    # Mapeia a pasta local para dentro do container para não perdermos o SQLite
+    # Injetamos as variáveis diretamente para garantir a execução "Zero Atrito" ao clonar
+    environment:
+      - SECRET_KEY=chave_secreta_do_avaliador_123
+      - API_URL=http://127.0.0.1:5000/api/agendamentos
+    # Mapeia a pasta local para dentro do container para não perdermos o banco de dados
     volumes:
       - .:/app
+    command: sh -c "python seed.py && python app/app.py"
