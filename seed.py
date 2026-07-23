@@ -49,7 +49,23 @@ def criar_banco_de_dados():
     if cursor.fetchone()[0] == 0:  # Só insere se a tabela estiver vazia
         agendamentos = [
             ('João Silva', '111.222.333-44', 'Dr. Carlos', 'Cardiologia', '2026-07-25', '10:00', 'Unimed', 'Confirmado'),
-            ('Maria Souza', '555.666.777-88', 'Dra. Ana', 'Dermatologia', '2026-07-26', '14:30', 'Amil', 'Pendente')
+            ('Maria Souza', '555.666.777-88', 'Dra. Ana', 'Dermatologia', '2026-07-26', '14:30', 'Amil', 'Pendente'),
+            ('Carlos Eduardo', '222.333.444-55', 'Dr. Roberto', 'Ortopedia', '2026-07-27', '09:15', 'Bradesco Saúde',
+             'Confirmado'),
+            ('Ana Clara', '333.444.555-66', 'Dra. Beatriz', 'Pediatria', '2026-07-27', '11:00', 'SulAmérica',
+             'Cancelado'),
+            ('Marcos Paulo', '444.555.666-77', 'Dr. Carlos', 'Cardiologia', '2026-07-28', '15:45', 'Unimed',
+             'Pendente'),
+            ('Juliana Costa', '666.777.888-99', 'Dra. Fernanda', 'Ginecologia', '2026-07-29', '08:30', 'Amil',
+             'Confirmado'),
+            ('Rafael Gomes', '777.888.999-00', 'Dr. João', 'Clínico Geral', '2026-07-30', '13:20', 'Particular',
+             'Pendente'),
+            ('Patrícia Lima', '888.999.000-11', 'Dra. Ana', 'Dermatologia', '2026-07-31', '16:00', 'Bradesco Saúde',
+             'Confirmado'),
+            ('Lucas Ferreira', '999.000.111-22', 'Dr. Roberto', 'Ortopedia', '2026-08-01', '10:30', 'Unimed',
+             'Confirmado'),
+            ('Camila Alves', '000.111.222-33', 'Dra. Beatriz', 'Pediatria', '2026-08-02', '14:00', 'Particular',
+             'Confirmado')
         ]
         cursor.executemany('''
         INSERT INTO appointments (paciente, cpf, medico, especialidade, data, horario, convenio, status)

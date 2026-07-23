@@ -102,7 +102,7 @@ def agenda():
 
     try:
         # Timeout de 5 segundos para evitar travamento da tela
-        resposta = requests.get(url_api, timeout=5)
+        resposta = requests.get(url_api, timeout=5, cookies=request.cookies)
         resposta.raise_for_status()
         dados_json = resposta.json()
 
@@ -132,19 +132,44 @@ def agenda():
 
 
 # ---------------------------------------------------------
-# ROTA DA API MOCKADA (Do Passo 3)
+# ROTA DA API (Agora consumindo dados reais do Banco SQLite)
 # ---------------------------------------------------------
 @app.route('/api/agendamentos', methods=['GET'])
 @login_required
 def obter_agendamentos():
-    agendamentos_mock = [
-        {
-            "paciente": "Maria Silva", "CPF": "111.222.333-44", "medico": "Dr. João Carlos",
-            "especialidade": "Cardiologia", "data": "2026-07-25", "horario": "10:30",
-            "convenio": "Unimed", "status": "Confirmado"
-        }
-    ]
-    return jsonify(agendamentos_mock)
+    conn = get_db_connection()
+
+    # Se o banco estiver inacessível, retorna lista vazia
+    if conn is None:
+        return jsonify([])
+
+    try:
+        # Consulta os dados que o seed.py inseriu na tabela appointments
+        # Usamos "cpf as CPF" para garantir que a chave do JSON fique em maiúsculo como o frontend espera
+        agendamentos_db = conn.execute('''
+                                       SELECT paciente,
+                                              cpf as CPF,
+                                              medico,
+                                              especialidade,
+                                              data,
+                                              horario,
+                                              convenio,
+                                              status
+                                       FROM appointments
+                                       ''').fetchall()
+
+        # Converte as linhas do banco (sqlite3.Row) para uma lista de dicionários padrão do Python
+        agendamentos_reais = [dict(row) for row in agendamentos_db]
+
+        return jsonify(agendamentos_reais)
+
+    except sqlite3.Error as e:
+        logging.error(f"Erro ao buscar agendamentos na API: {e}")
+        return jsonify([])
+
+    finally:
+        if conn:
+            conn.close()
 
 
 @app.route('/')
