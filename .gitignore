@@ -9,6 +9,6 @@ env/
 __pycache__/
 *.pyc
 
-# Banco de dados SQLite local (opcional, dependendo se a vaga pede o banco populado, mas é boa prática ignorar arquivos dinâmicos)
+# Banco de dados SQLite local 
 *.db
 *.sqlite3
