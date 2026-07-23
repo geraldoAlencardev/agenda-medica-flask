@@ -33,9 +33,9 @@
 
         // Inicialização e Configuração do Tabulator
         var table = new Tabulator("#tabela-agendamentos", {
-            data: dadosAgendamentos, // Define os dados vindos do backend
-            layout: "fitColumns", // Ajusta as colunas automaticamente ao tamanho da tela
-            placeholder: "Nenhum agendamento encontrado", // Mensagem de tabela vazia
+            data: dadosAgendamentos,
+            layout: "fitColumns",
+            placeholder: "Nenhum agendamento encontrado",
             columns: [
                 {title:"Data", field:"data", sorter:"date"},
                 {title:"Horário", field:"horario"},
